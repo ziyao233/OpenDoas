@@ -146,7 +146,7 @@ proc_info(pid_t pid, int *ttynr, unsigned long long *starttime)
 
 	/* Get the 7th field, 5 fields after the last ')',
 	 * (2th field) because the 5th field 'comm' can include
-	 * spaces and closing paranthesis too.
+	 * spaces and closing parenthesis too.
 	 * See https://www.sudo.ws/alerts/linux_tty.html
 	 */
 	if ((p = strrchr(buf, ')')) == NULL)

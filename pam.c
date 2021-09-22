@@ -299,7 +299,7 @@ pamauth(const char *user, const char *myname, int interactive, int nopass, int p
 	if (ret == PAM_NEW_AUTHTOK_REQD)
 		ret = pam_chauthtok(pamh, PAM_CHANGE_EXPIRED_AUTHTOK);
 
-	/* account not vaild or changing the auth token failed */
+	/* account not valid or changing the auth token failed */
 	if (ret != PAM_SUCCESS) {
 		pamcleanup(ret, sess, cred);
 		syslog(LOG_AUTHPRIV | LOG_NOTICE, "failed auth for %s", myname);
