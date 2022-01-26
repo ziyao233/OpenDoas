@@ -260,6 +260,11 @@ main(int argc, char **argv)
 	const char *cwd;
 	char **envp;
 
+	if (argc <= 0 || argv == NULL || argv[0] == NULL) {
+		fprintf(stderr, "doas: executed without argv\n");
+		exit(1);
+	}
+
 	setprogname("doas");
 
 	closefrom(STDERR_FILENO + 1);
