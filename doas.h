@@ -36,7 +36,7 @@ struct passwd;
 char **prepenv(const struct rule *, const struct passwd *,
     const struct passwd *);
 
-#define PERMIT	1
+#define PERMIT	-1
 #define DENY	2
 
 #define NOPASS		0x1

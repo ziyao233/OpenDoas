@@ -148,8 +148,10 @@ permit(uid_t uid, gid_t *groups, int ngroups, const struct rule **lastr,
 			*lastr = rules[i];
 	}
 	if (!*lastr)
+		return -1;
+	if ((*lastr)->action == PERMIT)
 		return 0;
-	return (*lastr)->action == PERMIT;
+	return -1;
 }
 
 static void
@@ -184,6 +186,7 @@ checkconfig(const char *confpath, int argc, char **argv,
     uid_t uid, gid_t *groups, int ngroups, uid_t target)
 {
 	const struct rule *rule;
+	int rv;
 
 	if (setresuid(uid, uid, uid) != 0)
 		err(1, "setresuid");
@@ -191,9 +194,9 @@ checkconfig(const char *confpath, int argc, char **argv,
 	parseconfig(confpath, 0);
 	if (!argc)
 		exit(0);
-
-	if (permit(uid, groups, ngroups, &rule, target, argv[0],
-	    (const char **)argv + 1)) {
+	rv = permit(uid, groups, ngroups, &rule, target, argv[0],
+ 	    (const char **)argv + 1);
+	if (rv == 0) {
 		printf("permit%s\n", (rule->options & NOPASS) ? " nopass" : "");
 		exit(0);
 	} else {
@@ -342,8 +345,9 @@ main(int argc, char **argv)
 	}
 
 	cmd = argv[0];
-	if (!permit(uid, groups, ngroups, &rule, target, cmd,
-	    (const char **)argv + 1)) {
+	rv = permit(uid, groups, ngroups, &rule, target, cmd,
+	    (const char **)argv + 1);
+	if (rv != 0) {
 		syslog(LOG_AUTHPRIV | LOG_NOTICE,
 		    "command not permitted for %s: %s", mypw->pw_name, cmdline);
 		errc(1, EPERM, NULL);
