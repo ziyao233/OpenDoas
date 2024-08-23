@@ -4,7 +4,7 @@ COMPLETION=	doas.completion
 
 SRCS=		parse.y doas.c env.c
 
-include config.mk
+-include config.mk
 
 override CFLAGS:=-I. -Ilibopenbsd -O2 -Wall -Wextra ${OS_CFLAGS} ${CFLAGS}
 
